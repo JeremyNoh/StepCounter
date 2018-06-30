@@ -1,0 +1,31 @@
+{
+  "data": [
+    {
+      "name":"Abdo Force Power",
+      "step": [
+        {
+          "time": 30,
+          "title":"crunch"
+        },
+        {
+          "time": 20,
+          "title":"gainage"
+        }
+      ]
+    },
+    {
+      "name":"TKT mêm pas ",
+      "step": [
+        {
+          "time": 60,
+          "title":"burpees"
+        },
+        {
+          "time": 90,
+          "title":"Pompes"
+        }
+      ]
+    }
+
+  ]
+}
