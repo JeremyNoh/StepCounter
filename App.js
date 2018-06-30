@@ -4,17 +4,21 @@ import { StackNavigator, TabNavigator, TabBarBottom  } from 'react-navigation';
 console.disableYellowBox = true ;
 import  HomeScreen  from './screens/home';
 import  AddScreen  from './screens/add';
+import  PlayScreen  from './screens/play';
 
 
 
 const RootStack = StackNavigator(
     {
-      add: {
-           screen: AddScreen,
-       },
       home: {
            screen: HomeScreen,
        },
+      add: {
+           screen: AddScreen,
+       },
+      play: {
+          screen: PlayScreen,
+      },
     },
 );
 

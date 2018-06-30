@@ -16,7 +16,7 @@ import {
   Icon,
   Button,
   Text,
-  Card,
+  // Card,
   ListItem,
   FormLabel, FormInput, FormValidationMessage
 
@@ -25,7 +25,7 @@ import {
 import dataProgram from "../assets/data.json";
 
 import {
-  // Card,
+  Card,
   CardTitle,
   CardContent,
   CardAction,
@@ -42,8 +42,13 @@ class AddScreen extends React.Component {
   };
 
   // Debut navigationOptions
-  static navigationOptions = ({ navigation }) => {
+  static navigationOptions = ({ navigation, navigationOptions }) => {
     const { state, setParams, navigate } = navigation;
+
+    const { params } = navigation.state;
+     let program = params.program
+    //  console.log(program);
+
     return {
       headerTitle: "stepCount",
       headerStyle: {
@@ -74,10 +79,11 @@ class AddScreen extends React.Component {
   componentDidMount() {
     console.log("componentDidMount");
     this.props.navigation.setParams({
-      AddaProgram: this.AddaProgram
+      AddaProgram: this.AddaProgram,
     });
     this.CreateTab()
-    
+    let program = this.props.navigation.state.params.program || []
+    this.setState({program})
   }
 
   AddaProgram = () => {
@@ -105,9 +111,11 @@ class AddScreen extends React.Component {
     let step = this.state.step
     // console.log("test : ",test[0].time);
     return (
-     <ScrollView>
+     <ScrollView  horizontal={true}>
        {this.state.step.map((item, index) => (
          <Card title={`Step ${index +1}`} key = {index}>
+         <Text h4 style={styles.cardTitle}>Step {index +1}</Text>
+
               <View >
               <FormLabel>Name</FormLabel>
               <FormInput
@@ -116,8 +124,8 @@ class AddScreen extends React.Component {
               <FormLabel>Time</FormLabel>
               <FormInput
               keyboardType = 'numeric'
-              onChange={time => this.majStepTime(time , step , index) }
-              value={0}/>
+              onChangeText={time => this.majStepTime(time , step , index) }
+              />
               </View>
             </Card>
        ))}
@@ -128,23 +136,35 @@ class AddScreen extends React.Component {
   majStepTitle = (title , step , index ) => {
     step[index].title = title
     this.setState({step})
-    console.log(this.state);
-
   }
 
   majStepTime = (time , step , index ) => {
+    time =  parseInt(time)
     step[index].time = time
     this.setState({step})
-    console.log(this.state);
-
   }
 
   majStepName = (name ) => {
     data = this.state.data
     data.name = name
     this.setState({data})
-    console.log(this.state);
   }
+
+  finish = () => {
+    step = this.state.step
+    data = this.state.data
+    program = this.state.program
+    data.step = step
+    program = program.push(data)
+    this.setState({data , program})
+    console.log(this.state.program);
+
+    const str = JSON.stringify(this.state.program);
+      AsyncStorage.setItem("@program", str).then(() => {
+      this.props.navigation.navigate("home");
+    });
+
+    }
 
 
   render() {
@@ -159,8 +179,6 @@ class AddScreen extends React.Component {
 
 
         {this.Step()}
-        <Text >Ajout d'un Program</Text>
-
         <Button
         title="Ajouter une Etape"
         titleStyle={{ fontWeight: "700" }}
@@ -168,6 +186,13 @@ class AddScreen extends React.Component {
         containerStyle={{ marginTop: 20 }}
         onPress={this.stepUp}
       />
+      <Button
+      title="Valider son Programme"
+      titleStyle={{ fontWeight: "700" }}
+      buttonStyle={styles.Confirm}
+      containerStyle={{ marginTop: 20 }}
+      onPress={this.finish}
+    />
 
       </View>
     );
@@ -188,6 +213,19 @@ const styles = StyleSheet.create({
     paddingTop : 20,
     paddingBottom : 20 ,
   },
-
+  cardTitle : {
+    textAlign: "center",
+    color : '#5C63D8',
+    paddingTop : 20,
+    paddingLeft : 50,
+    paddingBottom : 20 ,
+  },
+  Confirm: {
+    alignItems: "center",
+    alignSelf: "stretch",
+    backgroundColor: "#5C63D8",
+    marginVertical: 10,
+    opacity: 1
+  },
 
 });

@@ -34,7 +34,7 @@ import {
 
 class HomeScreen extends React.Component {
   state = {
-
+    program : [],
   };
 
   // Debut navigationOptions
@@ -65,17 +65,19 @@ class HomeScreen extends React.Component {
   // Ex AsyncStorage
   async componentWillMount() {
     console.log("componentWillMount");
-    // try {
-    //   const result = await AsyncStorage.getItem("@User");
-    //   if (result) {
-    //     user = JSON.parse(result);
-    //     console.log(user);
-    //     this.setState({ id: user.id, token: user.token });
-    //   }
-    // } catch (e) {
-    //   console.log(e);
-    // }
-    this.setState({ program : dataProgram.data });
+    try {
+      const result = await AsyncStorage.getItem("@program");
+      if (result) {
+        program = JSON.parse(result);
+        this.setState({ program });
+      }
+    } catch (e) {
+      console.log(e);
+    }
+    // this.setState({ program : dataProgram.data });
+  }
+  componentDidUpdate(){
+    console.log("ertyui");
   }
 
   componentDidMount() {
@@ -87,6 +89,11 @@ class HomeScreen extends React.Component {
 
   AddaProgram = () => {
     this.props.navigation.navigate("add" , {program : this.state.program});
+  }
+
+  doaProgram = (index) => {
+    data = this.state.program[index]
+    this.props.navigation.navigate("play" , {data});
   }
 
 
@@ -105,7 +112,7 @@ class HomeScreen extends React.Component {
 
 
             return (
-              <TouchableOpacity key = {index} onPress={  () => {console.log(index)}} >
+              <TouchableOpacity key = {index} onPress={() => this.doaProgram(index)} >
               <Card title={item.name} key = {index}>
               <View >
                 <Text>{desc}</Text>
