@@ -76,9 +76,9 @@ class HomeScreen extends React.Component {
     }
     // this.setState({ program : dataProgram.data });
   }
-  componentDidUpdate(){
-    console.log("ertyui");
-  }
+  // componentDidUpdate(){
+  //   console.log("ertyui");
+  // }
 
   componentDidMount() {
     console.log("componentDidMount");

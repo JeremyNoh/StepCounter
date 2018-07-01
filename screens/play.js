@@ -22,6 +22,7 @@ import {
 
  } from "react-native-elements";
 
+import CountDown from 'react-native-countdown-component';
 import dataProgram from "../assets/data.json";
 
 import {
@@ -36,7 +37,8 @@ import {
 
 class PlayScreen extends React.Component {
   state = {
-    nbStep :1 ,
+    nbStep : 0 ,
+    isReady : false,
     data : {},
   };
 
@@ -69,21 +71,50 @@ class PlayScreen extends React.Component {
     console.log("componentDidMount");
     let data = this.props.navigation.state.params.data || {}
     this.setState({data})
+    this.firstStep(data)
+  }
+
+  firstStep(data){
+      valueStep = data.step[this.state.nbStep].time
+      isReady = true
+      nbStep = this.state.nbStep +1
+      this.setState({valueStep , nbStep , isReady})
+
+  }
+
+  nextStep(){
+      if (this.state.nbStep < this.state.data.step.length) {
+        valueStep = this.state.data.step[this.state.nbStep].time
+        nbStep= this.state.nbStep + 1
+        this.setState({valueStep , nbStep})
+      }
+      else {
+        console.log("finish !!!");
+        alert('finish')
+      }
   }
 
 
+  count(){
+      console.log("count : " ,this.state.valueStep);
+      return (
+        <CountDown
+          until={this.state.valueStep}
+          digitBgColor='#5C63D8'
+          onFinish={() => this.nextStep()}
+          onPress={() => alert('hello')}
+          size={20}
+        />
+      )
 
-  Step(){
-    return (
-      <Text h4 style={styles.title}> {this.state.data.name}</Text>
-   );
   }
 
 
   render() {
     return (
       <View style={styles.container}>
-      {this.Step()}
+      { this.state.isReady && this.count()}
+
       </View>
     );
   }
@@ -102,20 +133,6 @@ const styles = StyleSheet.create({
     textDecorationLine : "underline" ,
     paddingTop : 20,
     paddingBottom : 20 ,
-  },
-  cardTitle : {
-    textAlign: "center",
-    color : '#5C63D8',
-    paddingTop : 20,
-    paddingLeft : 50,
-    paddingBottom : 20 ,
-  },
-  Confirm: {
-    alignItems: "center",
-    alignSelf: "stretch",
-    backgroundColor: "#5C63D8",
-    marginVertical: 10,
-    opacity: 1
   },
 
 });
