@@ -75,6 +75,7 @@ class PlayScreen extends React.Component {
   }
 
   firstStep(data){
+    console.log(data);
       valueStep = data.step[this.state.nbStep].time
       isReady = true
       nbStep = this.state.nbStep +1
@@ -94,27 +95,43 @@ class PlayScreen extends React.Component {
       }
   }
 
+  continueStep(){
+    Alert.alert(
+      "Courage ",
+      "Prochaine Etape : Repos",
+      [
+        {
+          text: "OK",
+          onPress: () => {
+            console.log("deded");
+            this.nextStep();
+          }
+        }
+      ],
+      { cancelable: false }
+    );
+  }
 
-  count(){
+  countDown(){
       console.log("count : " ,this.state.valueStep);
       return (
         <CountDown
           until={this.state.valueStep}
           digitBgColor='#5C63D8'
-          onFinish={() => this.nextStep()}
+          onFinish={() => this.continueStep()}
           onPress={() => alert('hello')}
-          size={20}
+          size={30}
         />
       )
 
   }
 
 
+
   render() {
     return (
       <View style={styles.container}>
-      { this.state.isReady && this.count()}
-
+      { this.state.isReady && this.countDown()}
       </View>
     );
   }
@@ -124,8 +141,9 @@ export default PlayScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
-    // alignItems: "center"
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   title : {
     textAlign: "center",
