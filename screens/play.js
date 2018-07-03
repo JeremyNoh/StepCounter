@@ -74,7 +74,7 @@ class PlayScreen extends React.Component {
     this.firstStep(data)
   }
 
-  firstStep(data){
+  firstStep(data) {
     console.log(data);
       valueStep = data.step[this.state.nbStep].time
       isReady = true
@@ -83,7 +83,7 @@ class PlayScreen extends React.Component {
 
   }
 
-  nextStep(){
+  nextStep = () =>{
       if (this.state.nbStep < this.state.data.step.length) {
         valueStep = this.state.data.step[this.state.nbStep].time
         nbStep= this.state.nbStep + 1
@@ -95,7 +95,7 @@ class PlayScreen extends React.Component {
       }
   }
 
-  continueStep(){
+  continueStep = () =>{
     Alert.alert(
       "Courage ",
       "Prochaine Etape : Repos",
@@ -110,6 +110,9 @@ class PlayScreen extends React.Component {
       ],
       { cancelable: false }
     );
+  }
+  test(){
+
   }
 
   countDown(){
@@ -132,6 +135,7 @@ class PlayScreen extends React.Component {
     return (
       <View style={styles.container}>
       { this.state.isReady && this.countDown()}
+
       </View>
     );
   }

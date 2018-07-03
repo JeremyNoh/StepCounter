@@ -74,11 +74,7 @@ class HomeScreen extends React.Component {
     } catch (e) {
       console.log(e);
     }
-    // this.setState({ program : dataProgram.data });
   }
-  // componentDidUpdate(){
-  //   console.log("ertyui");
-  // }
 
   componentDidMount() {
     console.log("componentDidMount");
@@ -94,6 +90,30 @@ class HomeScreen extends React.Component {
   doaProgram = (index) => {
     data = this.state.program[index]
     this.props.navigation.navigate("play" , {data});
+  }
+
+  DeleteaProgram = (index) => {
+    program = this.state.program
+    console.log(this.state.program[index]);
+    Alert.alert(
+  "Suppimer ce Programe ",
+  "Etes vous sur de vouloir le Supprimer",
+  [
+    { text: "Cancel", valuer: true },
+
+    {
+      text: "Supprimer",
+      onPress: () => {
+        program.splice(index,1);
+        const str = JSON.stringify(this.state.program);
+        AsyncStorage.setItem("@program", str).then(() => {
+          this.setState({program})
+        });
+      }
+    }
+  ],
+  { cancelable: false }
+);
   }
 
 
@@ -112,7 +132,8 @@ class HomeScreen extends React.Component {
 
 
             return (
-              <TouchableOpacity key = {index} onPress={() => this.doaProgram(index)} >
+              <TouchableOpacity key = {index} onPress={() => this.doaProgram(index)}
+              onLongPress= {() => this.DeleteaProgram(index)} >
               <Card title={item.name} key = {index}>
               <View >
                 <Text>{desc}</Text>

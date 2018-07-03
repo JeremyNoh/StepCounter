@@ -154,15 +154,20 @@ class AddScreen extends React.Component {
     step = this.state.step
     data = this.state.data
     program = this.state.program
-    data.step = step
-    program = program.push(data)
-    this.setState({data , program})
-    console.log(this.state.program);
-
-    const str = JSON.stringify(this.state.program);
+    if (!(data.name == undefined) ) {
+      data.step = step
+      program = program.push(data)
+      this.setState({data , program})
+      console.log(data);
+      const str = JSON.stringify(this.state.program);
       AsyncStorage.setItem("@program", str).then(() => {
-      this.props.navigation.navigate("home");
-    });
+        this.props.navigation.pop();
+      });
+    }
+    else {
+      alert("Veuillez remplir tout les champs")
+    }
+
 
     }
 
