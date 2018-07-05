@@ -84,7 +84,9 @@ class PlayScreen extends React.Component {
   }
 
   nextStep = () =>{
+    this.setState({isReady: false})
       if (this.state.nbStep < this.state.data.step.length) {
+        this.setState({isReady: true})
         valueStep = this.state.data.step[this.state.nbStep].time
         nbStep= this.state.nbStep + 1
         this.setState({valueStep , nbStep})
@@ -103,14 +105,15 @@ class PlayScreen extends React.Component {
         {
           text: "OK",
           onPress: () => {
-            console.log("deded");
             this.nextStep();
           }
         }
       ],
       { cancelable: false }
     );
+
   }
+
   test(){
 
   }
@@ -121,7 +124,7 @@ class PlayScreen extends React.Component {
         <CountDown
           until={this.state.valueStep}
           digitBgColor='#5C63D8'
-          onFinish={() => this.continueStep()}
+          onFinish={() => {this.continueStep()}}
           onPress={() => alert('hello')}
           size={30}
         />
