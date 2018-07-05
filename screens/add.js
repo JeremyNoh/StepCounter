@@ -86,6 +86,7 @@ class AddScreen extends React.Component {
     this.setState({program})
   }
 
+
   AddaProgram = () => {
     console.log(this.state.program);
   }
@@ -161,7 +162,7 @@ class AddScreen extends React.Component {
       console.log(data);
       const str = JSON.stringify(this.state.program);
       AsyncStorage.setItem("@program", str).then(() => {
-        this.props.navigation.pop();
+        this.props.navigation.navigate("home" , {program : this.state.program});
       });
     }
     else {

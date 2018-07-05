@@ -40,6 +40,10 @@ class HomeScreen extends React.Component {
   // Debut navigationOptions
   static navigationOptions = ({ navigation }) => {
     const { state, setParams, navigate } = navigation;
+    const { params } = navigation.state;
+    // console.log("test",params);
+
+
     return {
       headerTitle: "stepCount",
       headerStyle: {
@@ -79,9 +83,10 @@ class HomeScreen extends React.Component {
   componentDidMount() {
     console.log("componentDidMount");
     this.props.navigation.setParams({
-      AddaProgram: this.AddaProgram
+      AddaProgram: this.AddaProgram,
     });
   }
+
 
   AddaProgram = () => {
     this.props.navigation.navigate("add" , {program : this.state.program});
@@ -94,9 +99,8 @@ class HomeScreen extends React.Component {
 
   DeleteaProgram = (index) => {
     program = this.state.program
-    console.log(this.state.program[index]);
     Alert.alert(
-  "Suppimer ce Programe ",
+  "Suppimer ce Programme ",
   "Etes vous sur de vouloir le Supprimer",
   [
     { text: "Cancel", valuer: true },
