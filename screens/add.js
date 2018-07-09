@@ -71,11 +71,6 @@ class AddScreen extends React.Component {
   };
   // Fin navigationOptions
 
-  // Ex AsyncStorage
-  // async componentWillMount() {
-  //   console.log("componentWillMount");
-  // }
-
   componentDidMount() {
     console.log("componentDidMount");
     this.props.navigation.setParams({
@@ -108,9 +103,7 @@ class AddScreen extends React.Component {
   }
 
   Step(){
-    // console.log(this.state);
     let step = this.state.step
-    // console.log("test : ",test[0].time);
     return (
      <ScrollView  horizontal={true}>
        {this.state.step.map((item, index) => (
@@ -127,6 +120,11 @@ class AddScreen extends React.Component {
               keyboardType = 'numeric'
               onChangeText={time => this.majStepTime(time , step , index) }
               />
+              <FormLabel>Repos</FormLabel>
+              <FormInput
+              keyboardType = 'numeric'
+              onChangeText={repos => this.majStepRepos(repos , step , index) }
+              />
               </View>
             </Card>
        ))}
@@ -142,6 +140,12 @@ class AddScreen extends React.Component {
   majStepTime = (time , step , index ) => {
     time =  parseInt(time)
     step[index].time = time
+    this.setState({step})
+  }
+
+  majStepRepos = (repos , step , index ) => {
+    repos =  parseInt(repos)
+    step[index].repos = repos
     this.setState({step})
   }
 

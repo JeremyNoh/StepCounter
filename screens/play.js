@@ -39,7 +39,6 @@ class PlayScreen extends React.Component {
   state = {
     nbStep : 0 ,
     isReady : false,
-    data : {},
   };
 
   // Debut navigationOptions
@@ -48,7 +47,6 @@ class PlayScreen extends React.Component {
 
     const { params } = navigation.state;
      let data = params.data
-    //  console.log(program);
 
     return {
       headerTitle: "stepCount",
@@ -62,83 +60,113 @@ class PlayScreen extends React.Component {
   };
   // Fin navigationOptions
 
-  // Ex AsyncStorage
-  // async componentWillMount() {
-  //   console.log("componentWillMount");
-  // }
 
   componentDidMount() {
     console.log("componentDidMount");
     let data = this.props.navigation.state.params.data || {}
-    this.setState({data})
-    this.firstStep(data)
+    this.transformDatatoArray(data)
   }
 
+
+  transformDatatoArray(data){
+    var programe = []
+    for (stepObj of data.step) {
+      var step = {}
+       step = {
+        title : stepObj.title,
+        time : stepObj.time
+      }
+      programe.push(step)
+      if (stepObj.repos) {
+        step = {
+          title : "Repos",
+         time : stepObj.repos,
+       }
+       programe.push(step)
+      }
+    }
+    this.setState({data : programe})
+    this.firstStep(programe)
+
+  }
+
+
   firstStep(data) {
-    console.log(data);
-      valueStep = data.step[this.state.nbStep].time
+    console.log("alllerrrr : ",data);
+      valueStep = data[this.state.nbStep].time
       isReady = true
       nbStep = this.state.nbStep +1
-      this.setState({valueStep , nbStep , isReady})
-
+      this.setState({valueStep ,nbStep , isReady})
   }
 
   nextStep = () =>{
     this.setState({isReady: false})
-      if (this.state.nbStep < this.state.data.step.length) {
-        this.setState({isReady: true})
-        valueStep = this.state.data.step[this.state.nbStep].time
-        nbStep= this.state.nbStep + 1
-        this.setState({valueStep , nbStep})
-      }
-      else {
-        console.log("finish !!!");
-        alert('finish')
-      }
+    valueStep = this.state.data[this.state.nbStep].time
+    nbStep= this.state.nbStep + 1
+    this.setState({valueStep , nbStep,isReady: true})
   }
 
   continueStep = () =>{
-    Alert.alert(
-      "Courage ",
-      "Prochaine Etape : Repos",
-      [
-        {
-          text: "OK",
-          onPress: () => {
-            this.nextStep();
+    if (this.state.nbStep < this.state.data.length) {
+      this.textAFaire()
+      Alert.alert(
+        "Courage ",
+        `Prochaine Etape : ${this.state.data[this.state.nbStep].title}`,
+        [
+          {
+            text: "OK",
+            onPress: () => {
+              this.nextStep();
+            }
           }
-        }
-      ],
-      { cancelable: false }
-    );
+        ],
+        { cancelable: false }
+      );
+
+    }
+    else {
+      alert('finish')
+    }
 
   }
 
-  test(){
-
+  textAFaire(){
+      return(
+        <Text h1>{this.state.data[this.state.nbStep-1].title}</Text>
+      );
   }
 
   countDown(){
       console.log("count : " ,this.state.valueStep);
-      return (
-        <CountDown
-          until={this.state.valueStep}
-          digitBgColor='#5C63D8'
-          onFinish={() => {this.continueStep()}}
-          onPress={() => alert('hello')}
-          size={30}
-        />
-      )
-
+      if (this.state.data[this.state.nbStep-1].title == "Repos") {
+        return (
+          <CountDown
+            until={this.state.valueStep}
+            digitBgColor='#771565'
+            onFinish={() => {this.continueStep()}}
+            onPress={() => alert('hello')}
+            size={30}
+          />
+        )
+      }
+      else {
+        return (
+          <CountDown
+            until={this.state.valueStep}
+            digitBgColor='#5C63D8'
+            onFinish={() => {this.continueStep()}}
+            onPress={() => alert('hello')}
+            size={30}
+          />
+        )
+      }
   }
-
-
 
   render() {
     return (
       <View style={styles.container}>
-      { this.state.isReady && this.countDown()}
-
+      {this.state.isReady && this.textAFaire()}
+      {this.state.isReady && this.countDown()}
       </View>
     );
   }
