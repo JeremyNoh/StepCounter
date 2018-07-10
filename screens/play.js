@@ -10,20 +10,21 @@ import {
   ScrollView,
   WebView,
   TextInput,
-  AsyncStorage
+  AsyncStorage,
+  Vibration,
 } from "react-native";
+
 import {
   Icon,
   Button,
   Text,
-  // Card,
   ListItem,
   FormLabel, FormInput, FormValidationMessage
-
  } from "react-native-elements";
 
 import CountDown from 'react-native-countdown-component';
 import dataProgram from "../assets/data.json";
+// import Sound from 'react-native-sound';
 
 import {
   Card,
@@ -106,7 +107,12 @@ class PlayScreen extends React.Component {
     this.setState({valueStep , nbStep,isReady: true})
   }
 
+    getSound(){
+      Vibration.vibrate(2000)
+  }
+
   continueStep = () =>{
+    this.getSound()
     if (this.state.nbStep < this.state.data.length) {
       this.textAFaire()
       Alert.alert(

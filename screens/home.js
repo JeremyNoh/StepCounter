@@ -22,15 +22,6 @@ import {
 
 import dataProgram from "../assets/data.json";
 
-import {
-  // Card,
-  CardTitle,
-  CardContent,
-  CardAction,
-  CardButton,
-  CardImage
-} from "react-native-cards";
-
 
 class HomeScreen extends React.Component {
   state = {
@@ -41,7 +32,6 @@ class HomeScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
     const { state, setParams, navigate } = navigation;
     const { params } = navigation.state;
-    // console.log("test",params);
 
 
     return {
@@ -103,7 +93,7 @@ class HomeScreen extends React.Component {
   "Suppimer ce Programme ",
   "Etes vous sur de vouloir le Supprimer",
   [
-    { text: "Cancel", valuer: true },
+    { text: "Annuler", valuer: true },
 
     {
       text: "Supprimer",
@@ -129,18 +119,24 @@ class HomeScreen extends React.Component {
         {
           this.state.program.map((item, index) => {
             var desc = ""
+            var time = 0
             for (step of item.step) {
               desc +=  `${step.title}, `
+              time += step.time
+              if (step.repos) {
+                time+= step.repos
+              }
             }
             desc = desc.substr(0,desc.length-2)
-
-
+            // test repos = 18
             return (
               <TouchableOpacity key = {index} onPress={() => this.doaProgram(index)}
               onLongPress= {() => this.DeleteaProgram(index)} >
               <Card title={item.name} key = {index}>
               <View >
                 <Text>{desc}</Text>
+                <Text>temps estimé : {time} secondes</Text>
+
               </View>
             </Card>
             </TouchableOpacity>
@@ -150,10 +146,17 @@ class HomeScreen extends React.Component {
 
         </ScrollView>
       );
-
+          // test
     //       return (
     //   <ScrollView>
     //     {this.state.program.map((item, index) => (
+    //
+    //       //       var desc = ""
+    //       //       for (step of item.step) {
+    //       //         desc +=  `${step.title}, `
+    //       //       }
+    //       //       desc = desc.substr(0,desc.length-2)
+    //
     //       <Card key={index}>
     //         <CardTitle subtitle={item.name} />
     //         <CardContent text={item.name} />
@@ -163,11 +166,17 @@ class HomeScreen extends React.Component {
     //             title="DO IT"
     //             color="#5C63D8"
     //           />
+    //           <CardButton
+    //             onPress={() => {}}
+    //             title="Supprimer"
+    //             color="#5C63D8"
+    //           />
     //         </CardAction>
     //       </Card>
     //     ))}
     //   </ScrollView>
     // );
+    // finTest
     }
   }
 

@@ -99,13 +99,25 @@ class AddScreen extends React.Component {
           }
 
       step.push(stepEtape)
-      this.setState({step})
+      // this.setState({step})
+
+      this.setState({step}, () => {this.MovetoOtherCard();});
+      // horizontal={true}
+  }
+  MovetoOtherCard(){
+    // this.refs._scrollView.scrollTo({x: 0, y: 100, animated: true})
+    this.refs._scrollView.scrollToEnd({animated: true})
   }
 
   Step(){
     let step = this.state.step
     return (
-     <ScrollView  horizontal={true}>
+     <ScrollView
+     // horizontal={true}
+     showsVerticalScrollIndicator
+     // showsHorizontalScrollIndicator={true}
+     ref='_scrollView'
+     >
        {this.state.step.map((item, index) => (
          <Card title={`Step ${index +1}`} key = {index}>
          <Text h4 style={styles.cardTitle}>Step {index +1}</Text>
