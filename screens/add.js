@@ -18,9 +18,10 @@ import {
   Text,
   // Card,
   ListItem,
-  FormLabel, FormInput, FormValidationMessage
-
- } from "react-native-elements";
+  FormLabel,
+  FormInput,
+  FormValidationMessage
+} from "react-native-elements";
 
 import dataProgram from "../assets/data.json";
 
@@ -33,12 +34,11 @@ import {
   CardImage
 } from "react-native-cards";
 
-
 class AddScreen extends React.Component {
   state = {
-    nbStep :1 ,
-    data : {},
-    step : [],
+    nbStep: 1,
+    data: {},
+    step: []
   };
 
   // Debut navigationOptions
@@ -46,8 +46,7 @@ class AddScreen extends React.Component {
     const { state, setParams, navigate } = navigation;
 
     const { params } = navigation.state;
-     let program = params.program
-    //  console.log(program);
+    let program = params.program;
 
     return {
       headerTitle: "stepCount",
@@ -60,11 +59,11 @@ class AddScreen extends React.Component {
 
       headerRight: (
         <View style={{ flexDirection: "row", marginRight: 20 }}>
-        <Icon
-        name="pencil-square-o"
-        type="font-awesome"
-        onPress={() => state.params.AddaProgram()}
-        />
+          <Icon
+            name="pencil-square-o"
+            type="font-awesome"
+            onPress={() => state.params.AddaProgram()}
+          />
         </View>
       )
     };
@@ -72,150 +71,144 @@ class AddScreen extends React.Component {
   // Fin navigationOptions
 
   componentDidMount() {
-    console.log("componentDidMount");
     this.props.navigation.setParams({
-      AddaProgram: this.AddaProgram,
+      AddaProgram: this.AddaProgram
     });
-    this.CreateTab()
-    let program = this.props.navigation.state.params.program || []
-    this.setState({program})
+    this.CreateTab();
+    let program = this.props.navigation.state.params.program || [];
+    this.setState({ program });
   }
 
-
-  AddaProgram = () => {
-    console.log(this.state.program);
-  }
+  AddaProgram = () => {};
   stepUp = () => {
-    this.setState({ nbStep : this.state.nbStep+1 })
-    this.CreateTab()
-
-  }
+    this.setState({ nbStep: this.state.nbStep + 1 });
+    this.CreateTab();
+  };
 
   CreateTab() {
-      let step = this.state.step
-      var stepEtape = {
-        time: 0,
-        title:""
-          }
+    let step = this.state.step;
+    var stepEtape = {
+      time: 0,
+      title: ""
+    };
 
-      step.push(stepEtape)
-      // this.setState({step})
+    step.push(stepEtape);
+    // this.setState({step})
 
-      this.setState({step}, () => {this.MovetoOtherCard();});
-      // horizontal={true}
+    this.setState({ step }, () => {
+      this.MovetoOtherCard();
+    });
+    // horizontal={true}
   }
-  MovetoOtherCard(){
+  MovetoOtherCard() {
     // this.refs._scrollView.scrollTo({x: 0, y: 100, animated: true})
-    this.refs._scrollView.scrollToEnd({animated: true})
+    this.refs._scrollView.scrollToEnd({ animated: true });
   }
 
-  Step(){
-    let step = this.state.step
+  Step() {
+    let step = this.state.step;
     return (
-     <ScrollView
-     // horizontal={true}
-     showsVerticalScrollIndicator
-     // showsHorizontalScrollIndicator={true}
-     ref='_scrollView'
-     >
-       {this.state.step.map((item, index) => (
-         <Card title={`Step ${index +1}`} key = {index}>
-         <Text h4 style={styles.cardTitle}>Step {index +1}</Text>
+      <ScrollView
+        // horizontal={true}
+        showsVerticalScrollIndicator
+        // showsHorizontalScrollIndicator={true}
+        ref="_scrollView"
+      >
+        {this.state.step.map((item, index) => (
+          <Card title={`Step ${index + 1}`} key={index}>
+            <Text h4 style={styles.cardTitle}>
+              Step {index + 1}
+            </Text>
 
-              <View >
+            <View>
               <FormLabel>Name</FormLabel>
               <FormInput
-              onChangeText={title => this.majStepTitle(title , step , index) }
+                onChangeText={title => this.majStepTitle(title, step, index)}
               />
               <FormLabel>Time</FormLabel>
               <FormInput
-              keyboardType = 'numeric'
-              onChangeText={time => this.majStepTime(time , step , index) }
+                keyboardType="numeric"
+                onChangeText={time => this.majStepTime(time, step, index)}
               />
               <FormLabel>Repos</FormLabel>
               <FormInput
-              keyboardType = 'numeric'
-              onChangeText={repos => this.majStepRepos(repos , step , index) }
+                keyboardType="numeric"
+                onChangeText={repos => this.majStepRepos(repos, step, index)}
               />
-              </View>
-            </Card>
-       ))}
-     </ScrollView>
-   );
+            </View>
+          </Card>
+        ))}
+      </ScrollView>
+    );
   }
 
-  majStepTitle = (title , step , index ) => {
-    step[index].title = title
-    this.setState({step})
-  }
+  majStepTitle = (title, step, index) => {
+    step[index].title = title;
+    this.setState({ step });
+  };
 
-  majStepTime = (time , step , index ) => {
-    time =  parseInt(time)
-    step[index].time = time
-    this.setState({step})
-  }
+  majStepTime = (time, step, index) => {
+    time = parseInt(time);
+    step[index].time = time;
+    this.setState({ step });
+  };
 
-  majStepRepos = (repos , step , index ) => {
-    repos =  parseInt(repos)
-    step[index].repos = repos
-    this.setState({step})
-  }
+  majStepRepos = (repos, step, index) => {
+    repos = parseInt(repos);
+    step[index].repos = repos;
+    this.setState({ step });
+  };
 
-  majStepName = (name ) => {
-    data = this.state.data
-    data.name = name
-    this.setState({data})
-  }
+  majStepName = name => {
+    data = this.state.data;
+    data.name = name;
+    this.setState({ data });
+  };
 
   finish = () => {
-    step = this.state.step
-    data = this.state.data
-    program = this.state.program
-    if (!(data.name == undefined) ) {
-      data.step = step
-      program = program.push(data)
-      this.setState({data , program})
-      console.log(data);
+    step = this.state.step;
+    data = this.state.data;
+    program = this.state.program;
+    if (!(data.name == undefined)) {
+      data.step = step;
+      program = program.push(data);
+      this.setState({ data, program });
       const str = JSON.stringify(this.state.program);
       AsyncStorage.setItem("@program", str).then(() => {
-        this.props.navigation.navigate("home" , {program : this.state.program});
+        this.props.navigation.navigate("home", { program: this.state.program });
       });
+    } else {
+      alert("Veuillez remplir tout les champs");
     }
-    else {
-      alert("Veuillez remplir tout les champs")
-    }
-
-
-    }
-
+  };
 
   render() {
     return (
       <View style={styles.container}>
-      <Text h4 style={styles.title}>Ajout d'un Program</Text>
-      <FormLabel>Nom du Program</FormLabel>
-      <FormInput
-      onChangeText={name => this.majStepName(name)}
-      value={this.state.data.name}/>
-
-
+        <Text h4 style={styles.title}>
+          Ajout d'un Program
+        </Text>
+        <FormLabel>Nom du Program</FormLabel>
+        <FormInput
+          onChangeText={name => this.majStepName(name)}
+          value={this.state.data.name}
+        />
 
         {this.Step()}
         <Button
-        title="Ajouter une Etape"
-        titleStyle={{ fontWeight: "700" }}
-        buttonStyle={styles.buttonStyle}
-        containerStyle={{ marginTop: 20 }}
-        onPress={this.stepUp}
-      />
-      <Button
-      title="Valider son Programme"
-      titleStyle={{ fontWeight: "700" }}
-      buttonStyle={styles.Confirm}
-      containerStyle={{ marginTop: 20 }}
-      onPress={this.finish}
-    />
-
+          title="Ajouter une Etape"
+          titleStyle={{ fontWeight: "700" }}
+          buttonStyle={styles.buttonStyle}
+          containerStyle={{ marginTop: 20 }}
+          onPress={this.stepUp}
+        />
+        <Button
+          title="Valider son Programme"
+          titleStyle={{ fontWeight: "700" }}
+          buttonStyle={styles.Confirm}
+          containerStyle={{ marginTop: 20 }}
+          onPress={this.finish}
+        />
       </View>
     );
   }
@@ -225,22 +218,22 @@ export default AddScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#fff"
     // alignItems: "center"
   },
-  title : {
+  title: {
     textAlign: "center",
-    color : '#5C63D8',
-    textDecorationLine : "underline" ,
-    paddingTop : 20,
-    paddingBottom : 20 ,
+    color: "#5C63D8",
+    textDecorationLine: "underline",
+    paddingTop: 20,
+    paddingBottom: 20
   },
-  cardTitle : {
+  cardTitle: {
     textAlign: "center",
-    color : '#5C63D8',
-    paddingTop : 20,
-    paddingLeft : 50,
-    paddingBottom : 20 ,
+    color: "#5C63D8",
+    paddingTop: 20,
+    paddingLeft: 50,
+    paddingBottom: 20
   },
   Confirm: {
     alignItems: "center",
@@ -248,6 +241,5 @@ const styles = StyleSheet.create({
     backgroundColor: "#5C63D8",
     marginVertical: 10,
     opacity: 1
-  },
-
+  }
 });
