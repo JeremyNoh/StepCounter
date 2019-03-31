@@ -1,15 +1,10 @@
 import React from "react";
 import {
   Alert,
-  Platform,
   StyleSheet,
   View,
-  Dimensions,
-  Image,
   TouchableOpacity,
   ScrollView,
-  WebView,
-  TextInput,
   AsyncStorage
 } from "react-native";
 import { Icon, Button, Text, Card, ListItem } from "react-native-elements";
@@ -18,7 +13,7 @@ import dataProgram from "../assets/data.json";
 
 class HomeScreen extends React.Component {
   state = {
-    program: []
+    program: undefined
   };
 
   // Debut navigationOptions
@@ -48,23 +43,30 @@ class HomeScreen extends React.Component {
   };
   // Fin navigationOptions
 
-  // Ex AsyncStorage
-  async componentWillMount() {
+  componentDidMount() {
+    this.props.navigation.setParams({
+      AddaProgram: this.AddaProgram
+    });
+
+    this._subscribe = this.props.navigation.addListener("didFocus", () => {
+      this.recupData();
+    });
+  }
+
+  async recupData() {
     try {
       const result = await AsyncStorage.getItem("@program");
+
       if (result) {
         program = JSON.parse(result);
+        this.setState({ program });
+      } else {
+        program = null;
         this.setState({ program });
       }
     } catch (e) {
       console.log(e);
     }
-  }
-
-  componentDidMount() {
-    this.props.navigation.setParams({
-      AddaProgram: this.AddaProgram
-    });
   }
 
   AddaProgram = () => {
@@ -99,8 +101,21 @@ class HomeScreen extends React.Component {
     );
   };
 
+  secondsToMinutes(time) {
+    if (time > 60) {
+      return (
+        Math.floor(time / 60) + "min " + Math.floor(time % 60) + " secondes"
+      );
+    }
+    return time + " secondes";
+  }
+
+  waitItem() {
+    return <Text style={styles.TextCenter}> Loading...</Text>;
+  }
+
   isReady() {
-    if (this.state.program) {
+    if (this.state.program && this.state.program.length > 0) {
       return (
         <ScrollView>
           {this.state.program.map((item, index) => {
@@ -124,7 +139,7 @@ class HomeScreen extends React.Component {
                 <Card title={item.name} key={index}>
                   <View>
                     <Text>{desc}</Text>
-                    <Text>temps estimé : {time} secondes</Text>
+                    <Text>temps estimé : {this.secondsToMinutes(time)} </Text>
                   </View>
                 </Card>
               </TouchableOpacity>
@@ -132,47 +147,28 @@ class HomeScreen extends React.Component {
           })}
         </ScrollView>
       );
-      // test
-      //       return (
-      //   <ScrollView>
-      //     {this.state.program.map((item, index) => (
-      //
-      //       //       var desc = ""
-      //       //       for (step of item.step) {
-      //       //         desc +=  `${step.title}, `
-      //       //       }
-      //       //       desc = desc.substr(0,desc.length-2)
-      //
-      //       <Card key={index}>
-      //         <CardTitle subtitle={item.name} />
-      //         <CardContent text={item.name} />
-      //         <CardAction separator={true} inColumn={false}>
-      //           <CardButton
-      //             onPress={() => {}}
-      //             title="DO IT"
-      //             color="#5C63D8"
-      //           />
-      //           <CardButton
-      //             onPress={() => {}}
-      //             title="Supprimer"
-      //             color="#5C63D8"
-      //           />
-      //         </CardAction>
-      //       </Card>
-      //     ))}
-      //   </ScrollView>
-      // );
-      // finTest
+    } else {
+      return (
+        <Button
+          title="Ajouter un Programme"
+          titleStyle={{ fontWeight: "700" }}
+          buttonStyle={styles.Confirm}
+          containerStyle={{ marginTop: 20 }}
+          onPress={this.AddaProgram}
+        />
+      );
     }
   }
 
   render() {
+    let { program } = this.state;
     return (
       <View style={styles.container}>
         <Text h4 style={styles.title}>
           Mes Programmes
         </Text>
-        {this.isReady()}
+        {program === undefined && this.waitItem()}
+        {program !== undefined && this.isReady()}
       </View>
     );
   }
@@ -191,5 +187,16 @@ const styles = StyleSheet.create({
     textDecorationLine: "underline",
     paddingTop: 20,
     paddingBottom: 20
+  },
+  Confirm: {
+    alignItems: "center",
+    alignSelf: "stretch",
+    backgroundColor: "#5C63D8",
+    marginVertical: 10,
+    opacity: 1
+  },
+  TextCenter: {
+    alignItems: "center",
+    textAlign: "center"
   }
 });

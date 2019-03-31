@@ -1,6 +1,11 @@
 {
   "expo": {
+    "slug": "stepCounter",
+    "name": "stepCounter",
     "sdkVersion": "27.0.0",
+    "orientation": "portrait",
+    "privacy": "public",
+    "icon": "./assets/icon.png",
     "android": {
       "package": "com.jeremynoh.stepcounter"
     }

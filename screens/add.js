@@ -128,10 +128,12 @@ class AddScreen extends React.Component {
               <FormLabel>Time</FormLabel>
               <FormInput
                 keyboardType="numeric"
+                placeholder="(En seconde)"
                 onChangeText={time => this.majStepTime(time, step, index)}
               />
               <FormLabel>Repos</FormLabel>
               <FormInput
+                placeholder="(En seconde)"
                 keyboardType="numeric"
                 onChangeText={repos => this.majStepRepos(repos, step, index)}
               />

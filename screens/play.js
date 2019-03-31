@@ -28,19 +28,60 @@ import CountDown from "react-native-countdown-component";
 import dataProgram from "../assets/data.json";
 // import Sound from 'react-native-sound';
 
-import {
-  Card,
-  CardTitle,
-  CardContent,
-  CardAction,
-  CardButton,
-  CardImage
-} from "react-native-cards";
-
+const emojie = [
+  "😀",
+  "😁",
+  "😂",
+  "🤣",
+  "😃",
+  "😄",
+  "😅",
+  "😆",
+  "😉",
+  "😊",
+  "😋",
+  "😎",
+  "😍",
+  "😘",
+  "😗",
+  "😙",
+  "😚",
+  "🙂",
+  "🤗",
+  "🤩",
+  "🤔",
+  "😶",
+  "🙄",
+  "😏",
+  "😮",
+  "🤐",
+  "😯",
+  "😌",
+  "😛",
+  "😜",
+  "😝",
+  "🙃",
+  "🤑",
+  "😲",
+  "😤",
+  "🤯",
+  "😬",
+  "😱",
+  "😳",
+  "🤪",
+  "😇",
+  "🤠",
+  "🤡",
+  "🤫",
+  "🤭",
+  "🤓"
+];
 class PlayScreen extends React.Component {
   state = {
     nbStep: 0,
-    isReady: false
+    isReady: false,
+    finishProgram: false,
+    data: undefined
   };
 
   // Debut navigationOptions
@@ -124,7 +165,8 @@ class PlayScreen extends React.Component {
         { cancelable: false }
       );
     } else {
-      alert("finish");
+      alert("Félicitation !!!");
+      this.setState({ finishProgram: true });
     }
   };
 
@@ -160,13 +202,33 @@ class PlayScreen extends React.Component {
     }
   }
 
+  emojieRandom() {
+    return emojie[Math.floor(Math.random() * emojie.length)];
+  }
+
   render() {
-    return (
-      <View style={styles.container}>
-        {this.state.isReady && this.textAFaire()}
-        {this.state.isReady && this.countDown()}
-      </View>
-    );
+    let { isReady, finishProgram } = this.state;
+    if (!finishProgram) {
+      return (
+        <View style={styles.container}>
+          {isReady && this.textAFaire()}
+          {isReady && this.countDown()}
+        </View>
+      );
+    } else {
+      return (
+        <View style={styles.container}>
+          <Text h1>Congrats !!</Text>
+          <Text h1>{this.emojieRandom()}</Text>
+          <Button
+            title="Quitter"
+            titleStyle={{ fontWeight: "700" }}
+            buttonStyle={styles.Confirm}
+            onPress={() => this.props.navigation.pop()}
+          />
+        </View>
+      );
+    }
   }
 }
 
@@ -184,5 +246,13 @@ const styles = StyleSheet.create({
     textDecorationLine: "underline",
     paddingTop: 20,
     paddingBottom: 20
+  },
+  Confirm: {
+    width: 250,
+    alignItems: "center",
+    alignSelf: "stretch",
+    backgroundColor: "#5C63D8",
+    marginVertical: 10,
+    opacity: 1
   }
 });
